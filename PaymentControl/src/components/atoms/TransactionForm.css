@@ -1,0 +1,117 @@
+
+/* Contenedor del scroll de categorías */
+.category-scroll {
+    max-height: 350px; /* Damos altura para que scrollee */
+    overflow-y: auto;
+    padding: 5px;
+    background: rgba(0,0,0,0.02);
+    border-radius: 12px;
+}
+
+
+
+.input-field {
+    background: rgb(255, 255, 255);
+    /* backdrop-filter: blur(5px); */
+    padding: 0px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    position: relative; /* Para la etiqueta absoluta */
+}
+
+
+.small-label {
+    font-size: 10px;
+
+    text-transform: uppercase;
+    position: absolute;
+    top: 2px;
+    left: 12px;
+}
+/* Ajuste para que el texto no se monte sobre el label pequeño */
+.input-field input[type="text"], .input-field input[type="number"] {
+    padding-top: 10px;
+}
+
+
+.toggle-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5px;
+}
+
+/* Indicador de estado (Pagado/Pendiente) */
+.status-indicator {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: none;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: 0.3s all;
+}
+
+.is-pending {
+    background: #f0f0f0;
+    color: #666;
+}
+
+.is-paid {
+    background: #e1f5fe;
+    color: #0288d1;
+}
+
+.submit-btn {
+    background: #222;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+
+
+.glass-input {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.384);
+    box-sizing: border-box;
+}
+
+
+
+
+
+.minimalist-form {
+    display: flex;
+    flex-direction: column;
+    padding: 6px;
+    /* height: 100%;  */
+}
+
+.form-body {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    overflow-y: auto; /* Scroll interno si el form es muy largo */
+    padding: 2px;
+    padding-bottom: 20px;
+    scrollbar-width: none;
+}

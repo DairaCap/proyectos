@@ -1,0 +1,30 @@
+.home-container{
+    display: flex;
+    gap: 10px;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+}
+.resent-spending-list{
+    flex:1 1 auto;
+    overflow-y: auto; 
+    scrollbar-width: none;
+
+    width: 350px;
+}
+.spending-vision{
+    flex:1 1 auto;
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 1%;
+}
+.spending-graph{
+    border: 1px solid black;
+    height: 200px;
+}
+.spending-marker{
+    border: 1px solid black;
+    height: 100px;
+}

@@ -1,0 +1,81 @@
+/* 1. Contenedor que llena la pantalla (Top o Bottom) */
+.full-screen-container {
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* Oculta lo que se sale del slider */
+    position: relative;
+
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+/* 2. El Slider de 200% */
+.internal-slider {
+    display: flex;
+    width: 200%; 
+    height: 100%;
+    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); /* Animación suave */
+}
+
+/* Estados de desplazamiento */
+.internal-slider.step-1 { transform: translateX(0); }
+.internal-slider.step-2 { transform: translateX(-50%); }
+
+/* 3. Cada vista individual (50% del slider = 100% de la pantalla) */
+.internal-view {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    /* Importante: para que el contenido no se pegue entre vistas */
+    padding-right: 15px; 
+    box-sizing: border-box;
+    overflow: scroll;
+    scrollbar-width: none;
+
+}
+.header-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+.back-btn-circle {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: white;
+    border: 1px solid rgba(0,0,0,0.05);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.back-btn-circle:active { transform: scale(0.95); }
+
+
+.header-minimal {
+    font-size: 18px;
+    font-weight: 700;
+    color: #222;
+}
+
+/* 4. Scroll específico para la lista de categorías */
+.category-scroll-container {
+    flex: 1; /* Ocupa el espacio restante */
+    overflow-y: auto;
+    padding-top: 10px;
+}
+/* Ocultar barra de scroll fea */
+.category-scroll-container::-webkit-scrollbar { display: none; }
+
+.categories-grid {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 20px;
+}
+
+

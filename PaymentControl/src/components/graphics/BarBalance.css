@@ -1,0 +1,94 @@
+.bar-comparison-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.filter-buttons button {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+}
+
+.filter-buttons button.active {
+    background: #474747;
+    border-color: #adadad;
+    box-shadow: 0 0 10px rgba(74, 131, 135, 0.4);
+}
+
+.chart-container {
+    flex-grow: 1;
+    min-height: 200px;
+}
+
+.summary-footer {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 0.9rem;
+}
+
+.warning { color: #ff4d4d; font-weight: bold; }
+.success { color: #7c7c7c; }
+
+.bar-balance-container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.bar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 15px;
+}
+
+.nav-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.nav-controls button {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    padding: 4px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: background 0.3s;
+}
+
+.nav-controls button:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.current-range-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #4a8387; /* Resaltamos el rango actual */
+    min-width: 100px;
+    text-align: center;
+}
+
+.chart-content {
+    flex: 1;
+    min-height: 0;
+}

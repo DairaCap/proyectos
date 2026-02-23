@@ -1,0 +1,43 @@
+.chart-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%; /* Ajusta según necesites */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.chart-label {
+    position: absolute;
+    text-align: center;
+    z-index: 10;
+    pointer-events: none; /* Para que el mouse atraviese el texto y active el Tooltip */
+    font-family: Arial, sans-serif;
+    color: black;
+}
+
+.label-title {
+    margin: 0;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.8;
+}
+
+.label-value {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: bold;
+    font-size:medium;
+}
+
+/* Estilo especial cuando hay sobregiro */
+.text-danger {
+    color: #ff4d4d;
+    text-shadow: 0 0 10px rgba(255, 77, 77, 0.4);
+}
+
+.text-danger .label-value {
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
+}
