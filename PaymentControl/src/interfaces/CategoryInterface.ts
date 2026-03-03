@@ -43,7 +43,7 @@ const AmountPerCategoryFromAPI = (data: any) => {
 /*
  * @description: Función para obtener categorías desde una API
  */
-const FetchCategory = async (type: string): Promise<CategoryInterface[]> => {
+const FetchCategory = async (type: string,categoryType: string, date): Promise<CategoryInterface[]> => {
 
     return new Promise(async (resolve, reject) => {
         try {

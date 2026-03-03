@@ -34,6 +34,7 @@ const FetchSpending = async (): Promise<SpendingInterface[]> => {
     return new Promise(async(resolve,reject) => {
         try {
             const response = await fetch('http://localhost:8081/spendings');
+            debugger
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }

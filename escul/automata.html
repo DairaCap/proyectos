@@ -1,0 +1,293 @@
+<!-- /**
+* @fileoverview Implementación de un Autómata Celular Unidimensional (Regla 126).
+* @author       Daira Aimé Calzada Pérez
+* DESCRIPCIÓN:
+* Este script simula la evolución de un autómata elemental utilizando una tabla 
+* de transición para generar patrones fractales (Triángulo de Sierpinski).
+* Optimizado para renderizado en HTML5 Canvas con lógica de mundo toroidal.
+
+    --- Recomiendo abrirlo con VSC
+        click derecho sobre el archivo y 
+        "Abrir con Live Server" (descargar la extención de VSC "Live Server")
+*/ -->
+
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+    <title>Autómata Calular Unidimensional - Daira CP</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: radial-gradient(circle, #c9c9c9 0%, #6d6d6d 99%, #fecfef 100%);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* NavBar */
+        .header-controls {
+            background: #141414;
+            color: white;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+        }
+
+        /* Mis datos */
+        .datos-alumno {
+            font-size: 14px;
+            line-height: 1.4;
+            border-left: 3px solid #9c9c9c;
+            padding-left: 15px;
+        }
+
+        .dato-label {
+            color: #bdc3c7;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        /* Inputs */
+        .controles {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .input-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-item label {
+            font-size: 10px;
+            text-transform: uppercase;
+            color: #bdc3c7;
+        }
+
+        input {
+            width: 65px;
+            padding: 5px;
+            border: none;
+            border-radius: 3px;
+            margin-top: 2px;
+        }
+
+        button {
+            padding: 8px 15px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .btn-run {
+            background: #5c5c5c;
+            color: white;
+        }
+
+        .btn-reset {
+            background: #5c5c5c;
+            color: white;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+/* /////*****
+
+
+
+*/
+        /* Contenedor del Canvas */
+        .canvas-container {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow: auto;
+        }
+
+        canvas {
+            background: #ffffff;
+            border: 5px solid #34495e;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            image-rendering: pixelated;
+            /* Para que se vea nítido */
+        }
+
+        .titulo {
+            align-self: center;
+            margin-bottom: 0;
+        }
+
+        .texto-complementario {
+            align-self: center;
+            width: 1300px;
+            text-align: center;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="header-controls">
+        <div class="datos-alumno">
+            <div><span class="dato-label">NOMBRE:</span> Daira Aimé Calzada Pérez</div>
+            <div><span class="dato-label">MATERIA:</span> Inteligencia Artificial</div>
+            <div><span class="dato-label">GRUPO:</span> 9 <span class="dato-label">FECHA:</span> 24/02/2026</div>
+        </div>
+
+        <div class="controles">
+            <div class="input-item">
+                <label>Ancho (px)</label>
+                <input type="number" id="inAncho" value="900">
+            </div>
+            <div class="input-item">
+                <label>Alto (px)</label>
+                <input type="number" id="inAlto" value="500">
+            </div>
+            <div class="input-item">
+                <label>Tamaño de celda (px)</label>
+                <input type="number" id="inCelda" value="3">
+            </div>
+
+            <button class="btn-reset" onclick="prepararMundo()">Establecer tamaño</button>
+            <button class="btn-run" onclick="iniciar('sierpinski')">Sierpinski</button>
+            <button class="btn-run" style="background:#5c5c5c" onclick="iniciar('aleatorio')">Aleatorio</button>
+        </div>
+    </header>
+
+    <div class="titulo">
+        <h1>Autómata Celular Unidimensional</h1>
+    </div>
+    <p class="texto-complementario">
+        Este experimento demuestra que, para crear algo complejo, solo necesitas
+        reglas simples aplicadas muchas veces.
+        En resumen: Es el estudio de cómo el orden nace del caos usando reglas matemáticas.
+    </p>
+    <div class="canvas-container">
+        <canvas id="miCanvas"></canvas>
+    </div>
+
+    <script>
+        /**
+         * @fileoverview Implementación de un Autómata Celular Unidimensional (Regla 126).
+         * @author       Daira Aimé Calzada Pérez
+         * * DESCRIPCIÓN:
+         * Este script simula la evolución de un autómata elemental utilizando una tabla 
+         * de transición para generar patrones fractales (Triángulo de Sierpinski).
+         * Optimizado para renderizado en HTML5 Canvas con lógica de mundo toroidal.
+         */
+        
+         
+        const REGLAS = {
+            "000": 0,
+            "001": 1,
+            "010": 1,
+            "011": 1,
+            "100": 1,
+            "101": 1,
+            "110": 1,
+            "111": 0
+        };
+        
+        var canvas = document.getElementById("miCanvas");
+        var ctx = canvas.getContext("2d");
+        // Variable para guardar el temporizador (hilo) y poder detener la animación si es necesario
+        var hilo;
+
+        // --- FUNCIÓN PARA LIMPIAR Y PREPARAR EL Lienzo---
+        function prepararMundo() {
+            // Detenemos cualquier evolución que esté corriendo actualmente
+            clearTimeout(hilo);
+            // Ajustamos el tamaño del canvas con el valor del input
+            canvas.width = document.getElementById("inAncho").value;
+            canvas.height = document.getElementById("inAlto").value;
+            // Borramos todo lo que se haya dibujado previamente en el canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        // --- FUNCIÓN DE INICIO ---
+        function iniciar(modo) {
+            // Primero reseteamos el canvas y detenemos procesos viejos
+            prepararMundo();
+
+            //calculamos tamaños
+            var t = parseInt(document.getElementById("inCelda").value);
+            var cols = Math.floor(canvas.width / t);
+            var filas = Math.floor(canvas.height / t);
+
+            //La primera fila lleno de ceros (todos muertos)
+            var actual = new Array(cols).fill(0);
+
+            if (modo === 'sierpinski') {
+                // Si el modo es Sierpinski, ponemos un 1 (vivo) justo en la mitad
+                actual[Math.floor(cols / 2)] = 1;
+            } else {
+                // Si es aleatorio
+                for (var i = 0; i < cols; i++) {
+
+                    actual[i] = Math.random() > 0.5 ? 1 : 0;
+                }
+            }
+
+            // Dibujamos la primera 
+            dibujar(actual, 0, t);
+            // Iniciamos el proceso de evolución para crear la fila 1 en adelante
+            evolucionar(actual, 1, filas, cols, t);
+        }
+
+        // --- EVOLUCIÓN ---
+        function evolucionar(filaAnt, numF, maxF, maxC, t) {
+            if (numF >= maxF) return;
+
+            var nueva = [];
+            for (var i = 0; i < maxC; i++) {
+                // Obtenemos los estados de los vecinos
+                var izq = filaAnt[(i - 1 + maxC) % maxC];
+                var centro = filaAnt[i];
+                var der = filaAnt[(i + 1) % maxC];
+
+                // Creamos la "llave" de búsqueda (ej: "101")
+                var patron = "" + izq + centro + der;
+
+                // Se pone 0 o 1 de acuerdo a las reglas
+                nueva[i] = REGLAS[patron];
+            }
+
+            dibujar(nueva, numF, t);
+            hilo = setTimeout(() => evolucionar(nueva, numF + 1, maxF, maxC, t), 10);
+        }
+        // --- FUNCIÓN PARA PINTAR ---
+        function dibujar(datos, y, t) {
+
+            ctx.fillStyle = "#2c3e50";
+            // Recorremos el arreglo de la fila
+            for (var x = 0; x < datos.length; x++) {
+                // Si el dato es 1 (está vivo), dibujamos un cuadrito
+                if (datos[x] === 1) {
+                    // fillRect(posicionX, posicionY, ancho, alto)
+                    ctx.fillRect(x * t, y * t, t, t);
+                }
+            }
+        }
+
+        // Ejecutamos esta función al cargar para que el borde del canvas aparezca de inmediato
+        prepararMundo();
+    </script>
+</body>
+
+</html>

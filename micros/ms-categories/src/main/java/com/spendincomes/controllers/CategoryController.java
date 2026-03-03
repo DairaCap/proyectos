@@ -22,79 +22,52 @@ import com.spendincomes.models.AmountPerCategory;
 import com.spendincomes.models.Category;
 import com.spendincomes.services.interfaces.CategoryService;
 
+// ... (imports anteriores)
+
 @RestController
 @RequestMapping("/categories")
 @CrossOrigin(origins = "http://localhost:5173", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT})
-
 public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
 
-    @GetMapping
-    public ResponseEntity<List<Category>> categoryList() {
-        List<Category> categoryList = categoryService.getAllCategories();
-        return ResponseEntity.ok(categoryList);
-    }
-
-    @GetMapping("/type")
-    public ResponseEntity<List<Category>> categoryListByType(
-        @RequestParam ("type")
-        String type
-    ) {
-        List<Category> categoryList = categoryService.getAllCategoriesByType(type);
-        return ResponseEntity.ok(categoryList);
-    }
+    // ... (getAll y getByType están bien)
 
     @GetMapping("/{id}")
-    public ResponseEntity<Category> getById(@PathVariable Long id) {
+    public ResponseEntity<Category> getById(@PathVariable("id") Long id) { // <-- CAMBIO: Se agregó ("id")
         Category category = categoryService.findById(id);
         return (category != null) ? ResponseEntity.ok(category) : ResponseEntity.notFound().build();
     }
 
-    @PostMapping
-    public ResponseEntity<Category> createSpending(@RequestBody Category category) {
-        Category newSpending = categoryService.saveCategory(category);
-        return new ResponseEntity<>(newSpending, org.springframework.http.HttpStatus.CREATED);
-
-    }
-
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSpending(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteSpending(@PathVariable("id") Long id) { // <-- CAMBIO: Se agregó ("id")
         categoryService.deleteCategory(id);
         return ResponseEntity.noContent().build();
     }
 
-    // @PutMapping("/{id}")
-    // public ResponseEntity<Category> updateSpending(@PathVariable Long id, @RequestBody Category category) {
-    //     Category updatedSpending = categoryService.updateCategory(id, category);
-    //     return ResponseEntity.ok(updatedSpending);
-    // }
     @GetMapping("/total")
     public ResponseEntity<Double> totalPerCategory(
-            @RequestParam 
-            Long categoryID,
-            @RequestParam 
-            @DateTimeFormat (iso = DateTimeFormat.ISO.DATE) LocalDate date,
-            @RequestParam (value = "paid", required = false)
-            Boolean paid,
-            @RequestParam (value = "type", required = false)
-            String type  
+            @RequestParam("categoryID") Long categoryID,
+            @RequestParam("date") // <-- CAMBIO: Se agregó ("date")
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam("paid") Boolean paid,
+            @RequestParam("type") String type  
         ){
-        double total = categoryService.totalPerCategory(categoryID, date, paid,type);
+        double total = categoryService.totalPerCategory(categoryID, date, paid, type);
         return ResponseEntity.ok(total);
     }
+
     @GetMapping("/amountPerCategory")
     public ResponseEntity<List<AmountPerCategory>> amountPerCategory(
-        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) 
+        @RequestParam("date") // <-- CAMBIO: Se agregó ("date")
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) 
         LocalDate date,
-        @RequestParam ("type")
-        String type,
-        @RequestParam ("categoryType")
-        String categoryType
+        @RequestParam("type") String type, //semanal.mensual,anual
+        
+        @RequestParam("categoryType") String categoryType //spending, income
     ){
         List<AmountPerCategory> amountPerCategory = categoryService.amountPerCategory(date, type, categoryType);
         return ResponseEntity.ok(amountPerCategory);
     }
-
 }

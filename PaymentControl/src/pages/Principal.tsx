@@ -90,13 +90,13 @@ const Principal = () => {
         });
     }, [refresh]);
 
-    useEffect(() => {
-        FetchCategory().then((data: CategoryInterface[]) => {
-            setCategory(data);
-        }).catch((error) => {
-            console.error("Error fetching category data:", error);
-        });
-    }, [refresh]);
+    // useEffect(() => {
+    //     FetchCategory().then((data: CategoryInterface[]) => {
+    //         setCategory(data);
+    //     }).catch((error) => {
+    //         console.error("Error fetching category data:", error);
+    //     });
+    // }, [refresh]);
 
 
     // 3. FUNCIÓN DE RECARGA: Simplemente cambiamos el interruptor
@@ -200,7 +200,7 @@ const Principal = () => {
                 setIsModalOpen(false);
                 setEditingItem(null);
             }}
-            spendingToEdit={editingItem}
+            // spendingToEdit={editingItem}
 
         />
     </div>;
